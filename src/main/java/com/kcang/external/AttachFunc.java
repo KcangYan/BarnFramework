@@ -11,6 +11,7 @@ import com.kcang.ioc.impl.IocAdmin;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * 这个类里放一些附带功能
@@ -39,7 +40,7 @@ public class AttachFunc {
      * @return 代理对象
      */
     private static Object aopImpl(Object obj) throws IocWithoutInstanceException {
-        Method[] methods = obj.getClass().getMethods();
+        Method[] methods = obj.getClass().getDeclaredMethods();
         AopMethodInterceptor methodInterceptor = null;
         Object cglibObj = null;
         for(Method method : methods){
@@ -93,11 +94,12 @@ public class AttachFunc {
      * @throws IocInstanceRepeatException
      */
     public static void injectInstance(Object obj) throws IllegalAccessException, IocInstanceRepeatException {
-        Field[] fields = obj.getClass().getDeclaredFields();
+        //Field[] fields = obj.getClass().getDeclaredFields();
+        List<Field> fields = IocAdmin.getAllFields(obj.getClass());
         for(Field field : fields){
             InjectInstance injectInstance = field.getDeclaredAnnotation(InjectInstance.class);
             if(injectInstance != null){
-                String beanNameInject = injectInstance.name().equals("")? field.getType().getName(): injectInstance.name();
+                String beanNameInject = injectInstance.name().equals("")? field.getType().getSimpleName(): injectInstance.name();
                 field.setAccessible(true);
                 Object getInjectBean = null;
                 try {

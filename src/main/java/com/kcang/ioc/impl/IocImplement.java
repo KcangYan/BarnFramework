@@ -3,7 +3,6 @@ package com.kcang.ioc.impl;
 import com.kcang.exception.IocInstanceRepeatException;
 import com.kcang.exception.IocWithoutInstanceException;
 import com.kcang.ioc.annotation.Barn;
-import com.kcang.ioc.annotation.Primary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +32,6 @@ public class IocImplement {
         String instanceName = IocAdmin.getIocInstanceName(cls);
         //判断是否需要实例化托管容器
         if(instanceName != null){
-            instanceName = instanceName.equals("")? cls.getSimpleName():instanceName;
             Object instance = IocAdmin.newInstance(cls);
             IocAdmin.addIocInstance(instanceName, instance);
             myLogger.debug("实例化并写入容器 "+instanceName+" 成功");
@@ -60,7 +58,7 @@ public class IocImplement {
         for(String instanceName : barnClassMap.keySet()){
             Class cls = barnClassMap.get(instanceName);
             InjectInstanceImpl.injectConfigurationBarn(instanceName, cls);
-            Method[] methods = cls.getMethods();
+            Method[] methods = cls.getDeclaredMethods();
             for(Method method : methods){
                 Barn barn = method.getDeclaredAnnotation(Barn.class);
                 if(barn != null){
@@ -89,7 +87,7 @@ public class IocImplement {
     static Object createBeanInstance(String barnName) throws IocWithoutInstanceException, InvocationTargetException, IllegalAccessException, IocInstanceRepeatException {
         for(String instanceName : barnClassMap.keySet()){
             Class cls = barnClassMap.get(instanceName);
-            Method[] methods = cls.getMethods();
+            Method[] methods = cls.getDeclaredMethods();
             for(Method method : methods){
                 Barn barn = method.getDeclaredAnnotation(Barn.class);
                 if(barn != null){

@@ -45,7 +45,7 @@ public class AopAnnotationImplement {
         aopMethodProxy.setOrder(aopAnnotation.order());
         //自定义注解实现
         for(Class clsItem : classList){
-            Method[] methods = clsItem.getMethods();
+            Method[] methods = clsItem.getDeclaredMethods();
             for(Method method : methods){
                 if(method.getDeclaredAnnotation(aopAnnotation.AopAnnotation()) != null){
                     String instanceName = IocAdmin.getIocInstanceName(clsItem);

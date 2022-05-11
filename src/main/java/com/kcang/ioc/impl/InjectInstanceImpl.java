@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Set;
 
 public class InjectInstanceImpl {
@@ -25,7 +26,8 @@ public class InjectInstanceImpl {
      * @param instance 实例
      */
     private void injectBarn(String instanceName, Object instance) throws IocWithoutInstanceException, IllegalAccessException {
-        Field[] fields = instance.getClass().getDeclaredFields();
+        //Field[] fields = instance.getClass().getDeclaredFields();
+        List<Field> fields = IocAdmin.getAllFields(instance.getClass());
         for(Field field : fields){
             InjectInstance injectInstance = field.getDeclaredAnnotation(InjectInstance.class);
             if(injectInstance != null){
@@ -49,7 +51,8 @@ public class InjectInstanceImpl {
      * @throws IllegalAccessException
      */
     static void injectConfigurationBarn(String instanceName, Class cls) throws IocWithoutInstanceException, IllegalAccessException, InvocationTargetException, IocInstanceRepeatException {
-        Field[] fields = cls.getDeclaredFields();
+        //Field[] fields = cls.getDeclaredFields();
+        List<Field> fields = IocAdmin.getAllFields(cls);
         for(Field field : fields){
             InjectInstance injectInstance = field.getDeclaredAnnotation(InjectInstance.class);
             if(injectInstance != null){

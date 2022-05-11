@@ -7,13 +7,11 @@ import com.kcang.ioc.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class IocAdmin {
@@ -47,7 +45,7 @@ public class IocAdmin {
             if(annotationObj != null){
                 Method name = annotation.getMethod("name");
                 instanceName = (String) name.invoke(annotationObj);
-                instanceName = instanceName.equals("")? cls.getName() : instanceName;
+                instanceName = instanceName.equals("")? cls.getSimpleName() : instanceName;
                 break;
             }
         }
@@ -143,6 +141,32 @@ public class IocAdmin {
         }else {
             throw new RuntimeException(cls.getName()+" 不可以被实例化");
         }
+    }
+
+    /**
+     * 获取继承链上所有类的所有方法
+     * @param cls 类
+     * @return 方法集合
+     */
+    public static List<Method> getAllMethods(Class cls){
+        List<Method> methods = new ArrayList<>();
+        for(Class<?> itemClass = cls; itemClass != Object.class; itemClass = itemClass.getSuperclass()){
+            Collections.addAll(methods, itemClass.getDeclaredMethods());
+        }
+        return methods;
+    }
+
+    /**
+     * 获取继承链上所有类的所有属性
+     * @param cls 类
+     * @return 属性对象集合
+     */
+    public static List<Field> getAllFields(Class cls){
+        List<Field> fields = new ArrayList<>();
+        for(Class<?> itemClass = cls; itemClass != Object.class; itemClass = itemClass.getSuperclass()){
+            Collections.addAll(fields, itemClass.getDeclaredFields());
+        }
+        return fields;
     }
 
     /**
