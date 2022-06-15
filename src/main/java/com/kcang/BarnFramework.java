@@ -41,7 +41,7 @@ public final class BarnFramework {
         URL path = Thread.currentThread().getContextClassLoader().getResource(pag.replace(".", "/"));
         if(path == null || classpath == null){
             myLogger.error("获取URL路径失败，无法扫描包！");
-            myLogger.error("MiniFramework start fail !");
+            myLogger.error("BarnFramework start fail !");
             return;
         }
         String protocol = path.getProtocol();
@@ -73,7 +73,7 @@ public final class BarnFramework {
             mainRunnable(classList);
         }catch (Exception e){
             e.printStackTrace();
-            myLogger.error("MiniFramework start fail！");
+            myLogger.error("BarnFramework start fail！");
         }
     }
 
@@ -150,7 +150,7 @@ public final class BarnFramework {
         }catch (Exception e){
             myLogger.error("jar包扫描失败！"+e.getMessage());
             e.printStackTrace();
-            myLogger.error("MiniFramework start fail !");
+            myLogger.error("BarnFramework start fail !");
         }
     }
 
@@ -179,7 +179,7 @@ public final class BarnFramework {
                 }catch (Exception e){
                     myLogger.error("包类创建失败！"+e.getMessage());
                     e.printStackTrace();
-                    myLogger.error("MiniFramework start fail !");
+                    myLogger.error("BarnFramework start fail !");
                 }
             }
         }
